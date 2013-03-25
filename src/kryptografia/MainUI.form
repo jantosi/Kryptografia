@@ -139,7 +139,7 @@
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="privateKeyStaticLabel1" min="-2" max="-2" attributes="0"/>
+                          <Component id="publicKeyStaticLabel" min="-2" max="-2" attributes="0"/>
                           <Component id="publicKeyTextField" min="-2" pref="229" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="32767" attributes="0"/>
@@ -179,7 +179,7 @@
                       <EmptySpace max="32767" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
                           <Component id="privateKeyStaticLabel" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="privateKeyStaticLabel1" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="publicKeyStaticLabel" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
@@ -329,7 +329,7 @@
         <Property name="text" type="java.lang.String" value="Klucz prywatny"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="privateKeyStaticLabel1">
+    <Component class="javax.swing.JLabel" name="publicKeyStaticLabel">
       <Properties>
         <Property name="text" type="java.lang.String" value="Klucz publiczny"/>
       </Properties>

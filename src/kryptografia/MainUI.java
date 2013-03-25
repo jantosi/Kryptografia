@@ -59,7 +59,7 @@ public class MainUI extends javax.swing.JFrame {
         privateKeyTextField = new javax.swing.JTextField();
         publicKeyTextField = new javax.swing.JTextField();
         privateKeyStaticLabel = new javax.swing.JLabel();
-        privateKeyStaticLabel1 = new javax.swing.JLabel();
+        publicKeyStaticLabel = new javax.swing.JLabel();
         mainDecryptActionButton = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         fileMenu = new javax.swing.JMenu();
@@ -144,7 +144,7 @@ public class MainUI extends javax.swing.JFrame {
 
         privateKeyStaticLabel.setText("Klucz prywatny");
 
-        privateKeyStaticLabel1.setText("Klucz publiczny");
+        publicKeyStaticLabel.setText("Klucz publiczny");
 
         mainDecryptActionButton.setText("Odszyfruj");
         mainDecryptActionButton.addActionListener(new java.awt.event.ActionListener() {
@@ -248,7 +248,7 @@ public class MainUI extends javax.swing.JFrame {
                             .addComponent(privateKeyStaticLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(privateKeyStaticLabel1)
+                            .addComponent(publicKeyStaticLabel)
                             .addComponent(publicKeyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(mainCryptActionButton)
@@ -279,7 +279,7 @@ public class MainUI extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(privateKeyStaticLabel)
-                            .addComponent(privateKeyStaticLabel1))
+                            .addComponent(publicKeyStaticLabel))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(privateKeyTextField, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -305,16 +305,22 @@ public class MainUI extends javax.swing.JFrame {
     private void AESCipherModeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AESCipherModeMenuItemActionPerformed
         mainLogic.getCctx().setStrategy(new AESCryptStrategy());
         statusBarLabel1.setText("Tryb szyfrowania: szyfrowanie AES");
+        publicKeyStaticLabel.setVisible(false);
+        publicKeyTextField.setVisible(false);
     }//GEN-LAST:event_AESCipherModeMenuItemActionPerformed
 
     private void ElGamalCipherModeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ElGamalCipherModeMenuItemActionPerformed
         mainLogic.getCctx().setStrategy(new ElGamalCryptStrategy());
         statusBarLabel1.setText("Tryb szyfrowania: Szyfrowanie ElGamal");
+        publicKeyStaticLabel.setVisible(true);
+        publicKeyTextField.setVisible(true);
     }//GEN-LAST:event_ElGamalCipherModeMenuItemActionPerformed
 
     private void DSASignModeMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DSASignModeMenuItemActionPerformed
         mainLogic.getCctx().setStrategy(new DSASignStrategy());
         statusBarLabel1.setText("Tryb szyfrowania: podpis DSA");
+        publicKeyStaticLabel.setVisible(true);
+        publicKeyTextField.setVisible(true);
     }//GEN-LAST:event_DSASignModeMenuItemActionPerformed
 
     private void openFileToPlaintextMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openFileToPlaintextMenuItemActionPerformed
@@ -475,7 +481,6 @@ public class MainUI extends javax.swing.JFrame {
         {
             key = privateKeyTextField.getText();
         }
-        System.out.println("Key type: "+keyTypeForAction+" Key: "+key);
         return key;
     }
     
@@ -497,8 +502,8 @@ public class MainUI extends javax.swing.JFrame {
     private javax.swing.JMenuItem openFileToPlaintextMenuItem;
     private javax.swing.JTextArea outputTextArea;
     private javax.swing.JLabel privateKeyStaticLabel;
-    private javax.swing.JLabel privateKeyStaticLabel1;
     private javax.swing.JTextField privateKeyTextField;
+    private javax.swing.JLabel publicKeyStaticLabel;
     private javax.swing.JTextField publicKeyTextField;
     private javax.swing.JMenuItem saveCipherTextToFileMenuItem;
     private javax.swing.JMenuItem savePlainTextToFileMenuItem;
