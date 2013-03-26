@@ -2,10 +2,8 @@ package kryptografia;
 
 import java.math.BigInteger;
 import java.util.Random;
+import static kryptografia.ElGamalCryptStrategy.bigIntToString;
 
-/*
- * @author Pawel
- */
 public class ElGamalCryptStrategy implements CryptStrategy {
 
     private BigInteger p, g, h, a, r, pom;
