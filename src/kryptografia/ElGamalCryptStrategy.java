@@ -52,7 +52,9 @@ public class ElGamalCryptStrategy implements CryptStrategy {
         //r
         pom = p.subtract(BigInteger.ONE);
         r = BigInteger.probablePrime(bit, new Random());
+    
         while (true) {
+                System.out.println("\n\nr"+r+"\n\n");
             if (r.gcd(pom).equals(BigInteger.ONE)) {
                 break;
             } else {
@@ -69,7 +71,7 @@ public class ElGamalCryptStrategy implements CryptStrategy {
 
 
 
-        //szyfrogram jest 2x dluzszy od tekstu jawnego
+      
         int part = plaintext.length() / ileZnakow;
         BigInteger[] cipher = new BigInteger[part * 2];
         for (int i = 0, j = 0; i < part; i++, j += 2) {

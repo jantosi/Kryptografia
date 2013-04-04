@@ -4,9 +4,12 @@
  */
 package kryptografia;
 
+import javax.swing.JOptionPane;
+import javax.xml.bind.annotation.adapters.HexBinaryAdapter;
 /**
  *
- * @author Agnieszka
+ * @author Kuba
+ * n
  */
 public class AESCryptStrategy implements CryptStrategy {
     
@@ -165,22 +168,20 @@ public class AESCryptStrategy implements CryptStrategy {
         }
     }
    
-    public void wejscie()
-    {
-        szyfrogram=new int[4][4];     
-        for (int i = 0; i < 4; i++) 
-        {
-            for (int j = 0; j < 4; j++) 
-            { 
-                szyfrogram[i][j] = wejscie[i][j];  
-            }
-        }   
-    }
-    
     public void kluczZero(String klucz)
     {
         kluczRozszerzony= new int[4][4];
-        stringToInt(klucz, kluczRozszerzony);  
+        HexBinaryAdapter adapter = new HexBinaryAdapter();
+        byte tmp[]=adapter.unmarshal(klucz); 
+
+        for (int i = 0; i < 4; i++) 
+        {
+            for (int j = 0; j < 4; j++) 
+            {
+                kluczRozszerzony[i][j]=tmp[4*i+j]; 
+                if( kluczRozszerzony[i][j]<0 ) kluczRozszerzony[i][j]= (kluczRozszerzony[i][j]+256);
+            }
+        }
     }
     
     public void GenerowanieKlucza(int obrot) //generowanie klucza rozszerzonego z podstawowego
@@ -229,13 +230,13 @@ public class AESCryptStrategy implements CryptStrategy {
         }
     } 
 
-    public String cryptRound(String blok, String cryptKey) 
+    public String cryptRounds(String blok, String cryptKey) 
     {
-        wejscie=new int[4][4];
-        stringToInt(blok, wejscie);
-        wejscie();
+        szyfrogram=new int[4][4];
+        stringToInt(blok, szyfrogram);
         kluczZero(cryptKey);
         //WyswietlSzyfrogram();
+        
         AddRoundKey();
         //WyswietlSzyfrogram();
         
@@ -259,14 +260,36 @@ public class AESCryptStrategy implements CryptStrategy {
          AddRoundKey();
         //WyswietlSzyfrogram();
 
-        return intToString();
+        byte tmp[]=new byte[16];
+        
+        for (int i = 0; i < 4; i++) 
+        {
+            for (int j = 0; j < 4; j++) 
+            {
+                tmp[4*i+j]=(byte)szyfrogram[i][j];    
+            }
+        }
+        
+       HexBinaryAdapter adapter = new HexBinaryAdapter();
+       return adapter.marshal(tmp);
     }
 
-    public String decryptRound(String blok, String decryptKey) 
+    public String decryptRounds(String blok, String decryptKey) 
     {
-        wejscie=new int[4][4];
-        stringToInt(blok, wejscie);
-        wejscie();
+        szyfrogram=new int[4][4];
+        HexBinaryAdapter adapter = new HexBinaryAdapter();
+        byte tmp[]=adapter.unmarshal(blok);
+        
+        for (int i = 0; i < 4; i++) 
+        {
+            for (int j = 0; j < 4; j++) 
+            {
+                szyfrogram[i][j]=tmp[4*i+j]; 
+                if( szyfrogram[i][j]<0 ) szyfrogram[i][j]= (szyfrogram[i][j]+256);
+            }
+        }
+       
+        //WyswietlSzyfrogram();
         kluczZero(decryptKey);
         
         for (int i = 1; i < 11; i++) 
@@ -313,18 +336,32 @@ public class AESCryptStrategy implements CryptStrategy {
     {
         String wynik= new String();
         int dlugosc=ciphertext.length();
-        int ilosc=dlugosc/16;
-        if (dlugosc%16!=0) ilosc++;
+        int ilosc=dlugosc/32;
+        if (dlugosc%32!=0) ilosc++;
 
-        for (int i = 0; i < ilosc; i++) 
+        if (decryptKey.length()>32)
+        JOptionPane.showMessageDialog(null, "Klucz jest za długi!", "Błędny klucz", JOptionPane.ERROR_MESSAGE);
+        else if (decryptKey.length()<32)
+        JOptionPane.showMessageDialog(null, "Klucz jest za kródki!", "Błędny klucz", JOptionPane.ERROR_MESSAGE);
+        else
         {
-            String blok= new String();
-            for (int j = 0; j < 16; j++) 
+            try 
             {
-                if (i*16+j<dlugosc) blok=blok+ciphertext.charAt(i*16+j);
+                for (int i = 0; i < ilosc; i++) 
+                {
+                    String blok= new String();
+                    for (int j = 0; j < 32; j++) 
+                    {
+                        if (i*32+j<dlugosc) blok=blok+ciphertext.charAt(i*32+j);
+                    }
+                    blok=decryptRounds(blok, decryptKey);
+                    wynik=wynik+blok;
+                }
             }
-            blok=decryptRound(blok, decryptKey);
-            wynik=wynik+blok;
+            catch (IllegalArgumentException e )
+            {
+                JOptionPane.showMessageDialog(null, "Prawdopodobnie błędna wartości klucza lub zła wartość szyfrogramu", "Błędny klucz", JOptionPane.ERROR_MESSAGE);
+            }           
         }
         return wynik;
     }
@@ -336,18 +373,34 @@ public class AESCryptStrategy implements CryptStrategy {
         int dlugosc=plaintext.length();
         int ilosc=dlugosc/16;
         if (dlugosc%16!=0) ilosc++;
-   
-        for (int i = 0; i < ilosc; i++) 
+        
+        if (cryptKey.length()>32)
+        JOptionPane.showMessageDialog(null, "Klucz jest za długi!", "Błędny klucz", JOptionPane.ERROR_MESSAGE);
+        else if (cryptKey.length()<32)
+        JOptionPane.showMessageDialog(null, "Klucz jest za kródki!", "Błędny klucz", JOptionPane.ERROR_MESSAGE);
+        else 
         {
-            String blok= new String();
-            for (int j = 0; j < 16; j++) 
+            try 
             {
-                if (i*16+j<dlugosc) blok=blok+plaintext.charAt(i*16+j);
+                 for (int i = 0; i < ilosc; i++) 
+                {
+                    String blok= new String();
+                    for (int j = 0; j < 16; j++) 
+                    {
+                        if (i*16+j<dlugosc) blok=blok+plaintext.charAt(i*16+j);
+                    }
+                    blok=cryptRounds(blok, cryptKey);
+                    wynik=wynik+blok;
+                }
             }
-            blok=cryptRound(blok, cryptKey);
-            wynik=wynik+blok;
+            catch (IllegalArgumentException e )
+            {
+                JOptionPane.showMessageDialog(null, "Prawdopodobnie błędna wartości klucza", "Błędny klucz", JOptionPane.ERROR_MESSAGE);
+            }
+            
         }
         return wynik;
+         
     }
     
     @Override
@@ -372,8 +425,8 @@ public class AESCryptStrategy implements CryptStrategy {
                 if(blok.length()!=i)
                 {
                     tab[j][k]=blok.codePointAt(i);
-                    //lub
-                            //=(byte) plaintext.charAt(i);
+                    tab[j][k]= tab[j][k]%256;
+                    //lub      //=(byte) plaintext.charAt(i);
                     i++;
                 }
             }
