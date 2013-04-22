@@ -342,7 +342,7 @@ public class AESCryptStrategy implements CryptStrategy {
         if (decryptKey.length()>32)
         JOptionPane.showMessageDialog(null, "Klucz jest za długi!", "Błędny klucz", JOptionPane.ERROR_MESSAGE);
         else if (decryptKey.length()<32)
-        JOptionPane.showMessageDialog(null, "Klucz jest za kródki!", "Błędny klucz", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Klucz jest za krótki!", "Błędny klucz", JOptionPane.ERROR_MESSAGE);
         else
         {
             try 
@@ -377,7 +377,7 @@ public class AESCryptStrategy implements CryptStrategy {
         if (cryptKey.length()>32)
         JOptionPane.showMessageDialog(null, "Klucz jest za długi!", "Błędny klucz", JOptionPane.ERROR_MESSAGE);
         else if (cryptKey.length()<32)
-        JOptionPane.showMessageDialog(null, "Klucz jest za kródki!", "Błędny klucz", JOptionPane.ERROR_MESSAGE);
+        JOptionPane.showMessageDialog(null, "Klucz jest za krótki!", "Błędny klucz", JOptionPane.ERROR_MESSAGE);
         else 
         {
             try 
